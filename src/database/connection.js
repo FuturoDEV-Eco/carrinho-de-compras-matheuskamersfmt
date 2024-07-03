@@ -1,4 +1,5 @@
-import { Pool } from 'pg';
+import pkg from 'pg';
+const { Pool } = pkg;
 
 export const connection = new Pool({
     host: 'localhost',
@@ -7,3 +8,5 @@ export const connection = new Pool({
     database: 'labcommerce',
     port: 5432
 });
+
+export default connection;
