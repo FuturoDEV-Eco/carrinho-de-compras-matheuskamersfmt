@@ -36,6 +36,33 @@ class ProductController {
             });
         }
     }
+
+    async getProducts(request, response){
+
+        try{
+
+            const id = request.params.id
+            const product = await connection.query(`
+                select * from products`
+            )
+
+            if(product.rowCount === 0){
+                return response.status(404).json({
+                    message: 'Não há produtos cadastrados!'
+                })
+            }
+
+            response.json(product.rows[0])
+
+        }catch(error){
+            console.log(error)
+            response.status(500).json({
+                error: true,
+                message: 'Não foi possível listar o produto!',
+                err: error.message
+            })
+        }
+    }
 }
 
 export default ProductController;
