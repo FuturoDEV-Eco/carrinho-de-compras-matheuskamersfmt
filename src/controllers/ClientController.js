@@ -21,12 +21,12 @@ class ClientController {
         client: client.rows[0],
         message: "Cliente cadastrado com sucesso!",
       });
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
       return res.status(500).json({ 
         error: true,
         message: "Não foi possível cadastrar o cliente!", 
-        err: error?.message
+        err: err?.message
     });
     }
   }
