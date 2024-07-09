@@ -37,32 +37,70 @@ class ProductController {
         }
     }
 
-    async getProducts(request, response){
+    async getProducts(req, res){
 
         try{
-
-            const id = request.params.id
             const product = await connection.query(`
                 select * from products`
             )
 
             if(product.rowCount === 0){
-                return response.status(404).json({
+                return res.status(404).json({
                     message: 'Não há produtos cadastrados!'
                 })
             }
 
-            response.json(product.rows[0])
+            res.json(product.rows)
 
         }catch(error){
             console.log(error)
-            response.status(500).json({
+            res.status(500).json({
                 error: true,
                 message: 'Não foi possível listar o produto!',
                 err: error.message
             })
         }
     }
+
+    async getProductDetails(req, res) {
+        try {
+            const id = req.params.id;
+            const product = await connection.query(`
+                SELECT 
+                    p.id AS product_id,
+                    p.name AS name,
+                    p.amount,
+                    p.color,
+                    p.voltage,
+                    p.description,
+                    c.id AS category_id,
+                    c.name AS category
+                FROM 
+                    products p
+                INNER JOIN 
+                    categories c
+                ON 
+                    p.category_id = c.id
+                WHERE 
+                    p.id = $1
+            `, [id]);
+
+            if (product.rowCount === 0) {
+                return res.status(404).json({ message: 'Nenhum produto encontrado' });
+            }
+
+            res.json(product.rows[0]);
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ 
+                error: true,
+                message: 'Não foi possível listar o produto',
+                err: err.message
+            });
+        }
+    }
+    
+
 }
 
 export default ProductController;
