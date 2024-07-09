@@ -1,10 +1,10 @@
 import { Router } from "express";
 import ClientController from "../controllers/ClientController.js";
 
-const clientRoutes = Router();
+const clientsRoutes = Router();
 
 const clientController = new ClientController();
 
-clientRoutes.post('/client', clientController.create);
+clientsRoutes.post('/client', clientController.create);
 
-export default clientRoutes;
+export default clientsRoutes;
